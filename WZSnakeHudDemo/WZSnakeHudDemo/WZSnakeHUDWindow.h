@@ -1,14 +1,13 @@
 //
-//  ViewController.h
+//  WZSnakeHUDWindow.h
 //  WZSnakeHudDemo
 //
-//  Created by Wongzigii on 11/19/14.
+//  Created by Wongzigii on 11/21/14.
 //  Copyright (c) 2014 Wongzigii. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface WZSnakeHUDWindow : UIWindow
 
 @end
-

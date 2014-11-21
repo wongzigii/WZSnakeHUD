@@ -8,230 +8,259 @@
 
 #import "WZSnakeHUD.h"
 #import <objc/runtime.h>
+#import "WZSnakeHUDWindow.h"
+#import "WZSnakeHUDViewController.h"
 
-
-static const CGFloat FrameWidth      = 84.0f;    //Size of the HUD's frame
+static const CGFloat FrameWidth      = 84.0f;
 static const CGFloat FrameHeight     = 76.0f;
-static const CGFloat lengthIteration = 8.0f;     //velocity
-static const CGFloat framePerSecond  = 60.0f;    //fps
+static const CGFloat lengthIteration = 8.0f;
+static const CGFloat framePerSecond  = 60.0f;
 
-////* This is the direction of 'Snake' 's movement*////
 typedef enum {
-    WZSnakeHUDLineGoRight,
-    WZSnakeHUDLineGoDown,
-    WZSnakeHUDLineGoLeft,
-    WZSnakeHUDLineGoUp,
-    WZSnakeHUDLineStop
-} WZSnakeHUDLineDirection;
-
-@interface UIColor (MixColor)
-
-@property (nonatomic, readonly) CGFloat r;
-@property (nonatomic, readonly) CGFloat g;
-@property (nonatomic, readonly) CGFloat b;
-@property (nonatomic, readonly) CGFloat a;
-
-- (UIColor *)mixColor:(UIColor *)otherColor;
-
-@end
-
-@implementation UIColor (MixColor)
-
-@dynamic r, g, b, a;
-
-- (CGFloat)r {
-    return [[self rgba][@"r"] floatValue];
-}
-
-- (CGFloat)g {
-    return [[self rgba][@"g"] floatValue];
-}
-
-- (CGFloat)b {
-    return [[self rgba][@"b"] floatValue];
-}
-
-- (CGFloat)a {
-    return [[self rgba][@"a"] floatValue];
-}
-
-- (UIColor *)mixColor:(UIColor *)otherColor {
-    //混色的公式
-    //http://stackoverflow.com/questions/726549/algorithm-for-additive-color-mixing-for-rgb-values
-    CGFloat newAlpha = 1 - (1 - self.a) * (1 - otherColor.a);
-    CGFloat newRed = self.r * self.a / newAlpha + otherColor.r * otherColor.a * (1 - self.a) / newAlpha;
-    CGFloat newGreen = self.g * self.a / newAlpha + otherColor.g * otherColor.a * (1 - self.a) / newAlpha;
-    CGFloat newBlue = self.b * self.a / newAlpha + otherColor.b * otherColor.a * (1 - self.a) / newAlpha;
-    return [UIColor colorWithRed:newRed green:newGreen blue:newBlue alpha:newAlpha];
-}
-
-- (NSDictionary *)rgba {
-    NSDictionary *rgba = objc_getAssociatedObject(self, _cmd);
-    if (!rgba) {
-        CGFloat red = 0.0f, green = 0.0f, blue = 0.0f, alpha = 0.0f;
-        if ([self getRed:&red green:&green blue:&blue alpha:&alpha]) {
-            [self setRgba:@{ @"r":@(red), @"g":@(green), @"b":@(blue), @"a":@(alpha) }];
-        }
-        else {
-            //http://stackoverflow.com/questions/4700168/get-rgb-value-from-uicolor-presets
-            CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
-            unsigned char resultingPixel[3];
-            CGContextRef context = CGBitmapContextCreate(&resultingPixel, 1, 1, 8, 4, rgbColorSpace, (CGBitmapInfo)kCGImageAlphaNone);
-            CGContextSetFillColorWithColor(context, [self CGColor]);
-            CGContextFillRect(context, CGRectMake(0, 0, 1, 1));
-            CGContextRelease(context);
-            CGColorSpaceRelease(rgbColorSpace);
-            [self setRgba:@{ @"r":@(resultingPixel[0]), @"g":@(resultingPixel[1]), @"b":@(resultingPixel[2]), @"a":@(1.0f) }];
-        }
-    }
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setRgba:(NSDictionary *)rgba {
-    objc_setAssociatedObject(self, @selector(rgba), rgba, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-@end
+    RectLineGoRight,
+    RectLineGoDown,
+    RectLineGoLeft,
+    RectLineGoUp,
+    RectLineStop
+} RectLineGoDirection;
 
 @interface WZSnakeHUD()
 
-@property (nonatomic, assign) CGFloat topLength;
-@property (nonatomic, assign) CGFloat rightHeight;
-@property (nonatomic, assign) CGFloat bottomLength;
-@property (nonatomic, assign) CGFloat leftHeight;
-
-@property (nonatomic, assign) WZSnakeHUDLineDirection direction;
-@property (nonatomic, strong) UIImage *rectImage;
+@property (nonatomic, assign) NSInteger lengthTop;
+@property (nonatomic, assign) NSInteger heightTop;
+@property (nonatomic, assign) NSInteger lengthBottom;
+@property (nonatomic, assign) NSInteger heightBottom;
+@property (nonatomic, assign) RectLineGoDirection direction;
+@property (nonatomic, strong) UIImage *lineImage;
 @property (nonatomic, strong) WZSnakeHUDDisplayLink *displayLink;
-@property (nonatomic, assign) BOOL isFinished;
+@property (nonatomic, weak)   WZSnakeHUDWindow *window;
 
 @end
 
 @implementation WZSnakeHUD
 
-+ (void)show
+#pragma mark - class method
++ (void)show {
+    [self showMessage:nil];
+}
+
++ (void)showMessage:(NSAttributedString *)message
 {
+    WZSnakeHUDViewController *vc = [[WZSnakeHUDViewController alloc] init];
+    vc.hudColors = [self hudColors];
+    vc.hudBackgroundColor = [self hudBackgroundColor];
+    vc.hudMaskColor = [self hudMaskColor];
+    vc.hudLineWidth = [self hudLineWidth];
+    vc.hudMessage = message;
+    [self hudWindow].rootViewController = vc;
+    [[self hudWindow] makeKeyAndVisible];
+}
+
++ (void)hide {
+    [[self hudWindow].rootViewController performSelector:@selector(hide:) withObject: ^{
+        [self hudWindow].hidden = YES;
+        [self setHudWindow:nil];
+        [[UIApplication sharedApplication].keyWindow makeKeyWindow];
+    }];
+}
+
++ (void)setColors:(NSArray *)colors {
+    [self setHudColors:colors];
+}
+
++ (void)setBackgroundColor:(UIColor *)backgroundColor {
+    [self setHudBackgroundColor:backgroundColor];
+}
+
++ (void)setMaskColor:(UIColor *)maskColor {
+    [self setHudMaskColor:maskColor];
+}
+
++ (void)setLineWidth:(CGFloat)lineWidth {
+    [self setHudLineWidth:lineWidth];
+}
+
++ (WZSnakeHUDWindow *)hudWindow {
+    if (!objc_getAssociatedObject(self, _cmd)) {
+        [self setHudWindow:[[WZSnakeHUDWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]];
+    }
+    return objc_getAssociatedObject(self, _cmd);
+}
+
++ (void)setHudWindow:(WZSnakeHUDWindow *)hudWindow {
+    objc_setAssociatedObject(self, @selector(hudWindow), hudWindow, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
 }
 
-+ (void)hide
-{
-    
+//adding instance variable using runtime
+//http://stackoverflow.com/questions/17678298/how-does-objc-setassociatedobject-work
++ (void)setHudColors:(NSArray *)hudColors {
+    objc_setAssociatedObject(self, @selector(hudColors), hudColors, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-#pragma mark - DaiInboxDisplayLinkDelegate
-- (void)displayWillUpdateWithDeltaTime:(CFTimeInterval)deltaTime {
++ (NSArray *)hudColors {
+    if (!objc_getAssociatedObject(self, _cmd)) {
+        [self setHudColors:@[[UIColor redColor], [UIColor greenColor], [UIColor yellowColor], [UIColor blueColor]]];
+    }
+    return objc_getAssociatedObject(self, _cmd);
+}
+
++ (void)setHudBackgroundColor:(UIColor *)hudBackgroundColor {
+    objc_setAssociatedObject(self, @selector(hudBackgroundColor), hudBackgroundColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
++ (UIColor *)hudBackgroundColor {
+    if (!objc_getAssociatedObject(self, _cmd)) {
+        [self setHudBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.65f]];
+    }
+    return objc_getAssociatedObject(self, _cmd);
+}
+
++ (void)setHudLineWidth:(CGFloat)hudLineWidth {
+    objc_setAssociatedObject(self, @selector(hudLineWidth), @(hudLineWidth), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
++ (CGFloat)hudLineWidth {
+    if (!objc_getAssociatedObject(self, _cmd)) {
+        [self setHudLineWidth:2.0f];
+    }
+    NSNumber *hudLineWidth = objc_getAssociatedObject(self, _cmd);
+    return [hudLineWidth floatValue];
+}
+
++ (void)setHudMaskColor:(UIColor *)hudMaskColor {
+    objc_setAssociatedObject(self, @selector(hudMaskColor), hudMaskColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
++ (UIColor *)hudMaskColor {
+    if (!objc_getAssociatedObject(self, _cmd)) {
+        [self setHudMaskColor:[UIColor clearColor]];
+    }
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+#pragma mark - WZSnakeDisplayLink Delegate
+- (void)displayWillUpdateWithDeltaTime:(CFTimeInterval)deltaTime
+{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
         CGFloat deltaValue = MIN(1.0f, deltaTime / (1.0f / framePerSecond));
         
         switch (self.direction) {
-            case WZSnakeHUDLineGoRight:
+            case RectLineGoRight:
             {
-                self.topLength += lengthIteration * deltaValue / 5;
-                if (self.topLength >= FrameWidth) {
-                    self.direction = WZSnakeHUDLineGoDown;
+                self.lengthTop += lengthIteration * deltaValue / 5;
+                if (self.lengthTop >= FrameWidth) {
+                    self.direction = RectLineGoDown;
                 }
                 break;
             }
-                
-            case WZSnakeHUDLineGoDown:
+            case RectLineGoDown:
             {
-                self.rightHeight += lengthIteration * deltaValue / 5;
-                if (self.rightHeight >= FrameHeight) {
-                    self.direction = WZSnakeHUDLineGoLeft;
+                self.heightTop += lengthIteration * deltaValue / 5;
+                if (self.heightTop >= FrameHeight) {
+                    self.direction = RectLineGoLeft;
                 }
                 break;
             }
-                
-            case WZSnakeHUDLineGoLeft:
+            case RectLineGoLeft:
             {
-                self.bottomLength += lengthIteration * deltaValue / 5;
-                if (self.bottomLength >= FrameWidth) {
-                    self.direction = WZSnakeHUDLineGoUp;
+                self.lengthBottom += lengthIteration * deltaValue / 5;
+                if (self.lengthBottom >= FrameWidth) {
+                    self.direction = RectLineGoUp;
                 }
                 break;
             }
-                
-            case WZSnakeHUDLineGoUp:
+            case RectLineGoUp:
             {
-                self.leftHeight += lengthIteration * deltaValue / 5;
-                if (self.leftHeight >= FrameHeight) {
-                    self.direction = WZSnakeHUDLineStop;
+                self.heightBottom += lengthIteration * deltaValue / 5;
+                if (self.heightBottom >= FrameHeight) {
+                    self.direction = RectLineStop;
                 }
                 break;
             }
-                
-            case WZSnakeHUDLineStop:
+            case RectLineStop:
             {
                 //NSLog(@"Done");
-                self.isFinished = YES;
             }
                 break;
         }
-        self.rectImage = [self preDrawImage];
+        self.lineImage = [self preDrawImage];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setNeedsDisplay];
         });
     });
 }
 
+#pragma mark - private
 - (UIImage *)preDrawImage
 {
-    UIImage *rectImage;
+    UIImage *rectLineImage;
     
     UIGraphicsBeginImageContext(CGSizeMake(self.bounds.size.width, self.bounds.size.height));
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    //custom
     CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetRGBStrokeColor(context, 255, 255, 255, 1);
     CGContextSetLineWidth(context, self.hudLineWidth);
-    
+    //original point
     CGContextMoveToPoint(context, 0, 0);
     
-    ////Here we go
-    CGContextAddLineToPoint(context, self.topLength, 0);
-    
-    ////右上角 reached top-right corner?
-    if  (self.topLength >= FrameWidth) {
-        
-        CGContextAddLineToPoint(context, FrameWidth, (self.rightHeight >= FrameHeight) ? FrameHeight : self.rightHeight);
+    //here we go
+    CGContextAddLineToPoint(context, self.lengthTop, 0);
+    //reached top-right corner
+    if  (self.lengthTop >= FrameWidth) {
+        CGContextAddLineToPoint(context, FrameWidth, (self.heightTop >= FrameHeight) ? FrameHeight : self.heightTop);
     }
-    
-    ////右下角 reached bottom-right corner?
-    if (self.rightHeight >= FrameHeight) {
-        
-        CGContextAddLineToPoint(context, (self.bottomLength <= -FrameWidth) ? -FrameWidth : (FrameWidth - self.bottomLength), FrameHeight);
+    //reached bottom-right corner
+    if (self.heightTop >= FrameHeight) {
+        CGContextAddLineToPoint(context, (self.lengthBottom <= -FrameWidth) ? -FrameWidth : (FrameWidth - self.lengthBottom), FrameHeight);
     }
-    
-    ////左下角 reached bottom-left corner?
-    if (self.bottomLength >= FrameWidth) {
-        
-        CGContextAddLineToPoint(context, 0, (self.leftHeight <= -FrameHeight) ? -FrameHeight : (FrameHeight - self.leftHeight));
+    //reached bottom-left corner
+    if (self.lengthBottom >= FrameWidth) {
+        CGContextAddLineToPoint(context, 0, (self.heightBottom <= -FrameHeight) ? -FrameHeight : (FrameHeight - self.heightBottom));
     }
-    
     CGContextStrokePath(context);
-    rectImage = UIGraphicsGetImageFromCurrentImageContext();
+    rectLineImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return rectImage;
+    return rectLineImage;
 }
 
+- (void)showAnimated
+{
+    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+    [UIView animateWithDuration:0.3 / 1.5 animations: ^{
+        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+    } completion: ^(BOOL finished) {
+        [UIView animateWithDuration:0.3 / 2 animations: ^{
+            self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+        } completion: ^(BOOL finished) {
+            [UIView animateWithDuration:0.3 / 2 animations: ^{
+                self.transform = CGAffineTransformIdentity;
+            }];
+        }];
+    }];
+}
+
+#pragma mark - method override
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-    [self.rectImage drawInRect:rect];
+    [self.lineImage drawInRect:rect];
 }
 
+#pragma mark - life cycle
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor orangeColor];
-        self.direction = WZSnakeHUDLineGoRight;
+        //init
+        self.backgroundColor = [UIColor clearColor];
+        self.lengthTop = 0;
+        self.direction = RectLineGoRight;
         self.displayLink = [[WZSnakeHUDDisplayLink alloc] initWithDelegate:self];
     }
     return self;
 }
-
 
 @end

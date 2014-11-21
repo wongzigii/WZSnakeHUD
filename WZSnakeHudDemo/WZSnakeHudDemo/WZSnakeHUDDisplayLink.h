@@ -23,7 +23,6 @@
 @end
 
 @protocol WZSnakeDisplayLinkDelegate <NSObject>
-
 @required
 - (void)displayWillUpdateWithDeltaTime:(CFTimeInterval)deltaTime;
 

@@ -12,10 +12,11 @@
 		E05CA78A1A1CB99400A2F142 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E05CA7891A1CB99400A2F142 /* ViewController.m */; };
 		E05CA78D1A1CB99400A2F142 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E05CA78B1A1CB99400A2F142 /* Main.storyboard */; };
 		E05CA78F1A1CB99400A2F142 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E05CA78E1A1CB99400A2F142 /* Images.xcassets */; };
-		E05CA7921A1CB99400A2F142 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E05CA7901A1CB99400A2F142 /* LaunchScreen.xib */; };
 		E05CA79E1A1CB99400A2F142 /* WZSnakeHudDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E05CA79D1A1CB99400A2F142 /* WZSnakeHudDemoTests.m */; };
 		E05CA7A91A1CB9EC00A2F142 /* WZSnakeHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E05CA7A81A1CB9EC00A2F142 /* WZSnakeHUD.m */; };
 		E05CA7AC1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.m in Sources */ = {isa = PBXBuildFile; fileRef = E05CA7AB1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.m */; };
+		E0DC1C241A1F7B7000A98701 /* WZSnakeHUDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DC1C231A1F7B7000A98701 /* WZSnakeHUDViewController.m */; };
+		E0DC1C271A1F7B9100A98701 /* WZSnakeHUDWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E0DC1C261A1F7B9100A98701 /* WZSnakeHUDWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,7 +39,6 @@
 		E05CA7891A1CB99400A2F142 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E05CA78C1A1CB99400A2F142 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E05CA78E1A1CB99400A2F142 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		E05CA7911A1CB99400A2F142 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E05CA7971A1CB99400A2F142 /* WZSnakeHudDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WZSnakeHudDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E05CA79C1A1CB99400A2F142 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E05CA79D1A1CB99400A2F142 /* WZSnakeHudDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WZSnakeHudDemoTests.m; sourceTree = "<group>"; };
@@ -46,6 +46,10 @@
 		E05CA7A81A1CB9EC00A2F142 /* WZSnakeHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZSnakeHUD.m; sourceTree = "<group>"; };
 		E05CA7AA1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZSnakeHUDDisplayLink.h; sourceTree = "<group>"; };
 		E05CA7AB1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZSnakeHUDDisplayLink.m; sourceTree = "<group>"; };
+		E0DC1C221A1F7B7000A98701 /* WZSnakeHUDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZSnakeHUDViewController.h; sourceTree = "<group>"; };
+		E0DC1C231A1F7B7000A98701 /* WZSnakeHUDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZSnakeHUDViewController.m; sourceTree = "<group>"; };
+		E0DC1C251A1F7B9100A98701 /* WZSnakeHUDWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WZSnakeHUDWindow.h; sourceTree = "<group>"; };
+		E0DC1C261A1F7B9100A98701 /* WZSnakeHUDWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WZSnakeHUDWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,17 +91,13 @@
 		E05CA7801A1CB99400A2F142 /* WZSnakeHudDemo */ = {
 			isa = PBXGroup;
 			children = (
+				E0DC1C281A1F7BF300A98701 /* WZSnakeHUD */,
 				E05CA7851A1CB99400A2F142 /* AppDelegate.h */,
 				E05CA7861A1CB99400A2F142 /* AppDelegate.m */,
 				E05CA7881A1CB99400A2F142 /* ViewController.h */,
 				E05CA7891A1CB99400A2F142 /* ViewController.m */,
-				E05CA7AA1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.h */,
-				E05CA7AB1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.m */,
-				E05CA7A71A1CB9EC00A2F142 /* WZSnakeHUD.h */,
-				E05CA7A81A1CB9EC00A2F142 /* WZSnakeHUD.m */,
 				E05CA78B1A1CB99400A2F142 /* Main.storyboard */,
 				E05CA78E1A1CB99400A2F142 /* Images.xcassets */,
-				E05CA7901A1CB99400A2F142 /* LaunchScreen.xib */,
 				E05CA7811A1CB99400A2F142 /* Supporting Files */,
 			);
 			path = WZSnakeHudDemo;
@@ -127,6 +127,21 @@
 				E05CA79C1A1CB99400A2F142 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E0DC1C281A1F7BF300A98701 /* WZSnakeHUD */ = {
+			isa = PBXGroup;
+			children = (
+				E05CA7AA1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.h */,
+				E05CA7AB1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.m */,
+				E05CA7A71A1CB9EC00A2F142 /* WZSnakeHUD.h */,
+				E05CA7A81A1CB9EC00A2F142 /* WZSnakeHUD.m */,
+				E0DC1C251A1F7B9100A98701 /* WZSnakeHUDWindow.h */,
+				E0DC1C261A1F7B9100A98701 /* WZSnakeHUDWindow.m */,
+				E0DC1C221A1F7B7000A98701 /* WZSnakeHUDViewController.h */,
+				E0DC1C231A1F7B7000A98701 /* WZSnakeHUDViewController.m */,
+			);
+			name = WZSnakeHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,7 +225,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E05CA78D1A1CB99400A2F142 /* Main.storyboard in Resources */,
-				E05CA7921A1CB99400A2F142 /* LaunchScreen.xib in Resources */,
 				E05CA78F1A1CB99400A2F142 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,9 +243,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0DC1C241A1F7B7000A98701 /* WZSnakeHUDViewController.m in Sources */,
 				E05CA78A1A1CB99400A2F142 /* ViewController.m in Sources */,
 				E05CA7AC1A1CBAC900A2F142 /* WZSnakeHUDDisplayLink.m in Sources */,
 				E05CA7871A1CB99400A2F142 /* AppDelegate.m in Sources */,
+				E0DC1C271A1F7B9100A98701 /* WZSnakeHUDWindow.m in Sources */,
 				E05CA7841A1CB99400A2F142 /* main.m in Sources */,
 				E05CA7A91A1CB9EC00A2F142 /* WZSnakeHUD.m in Sources */,
 			);
@@ -262,14 +278,6 @@
 				E05CA78C1A1CB99400A2F142 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		E05CA7901A1CB99400A2F142 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E05CA7911A1CB99400A2F142 /* Base */,
-			);
-			name = LaunchScreen.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -424,6 +432,7 @@
 				E05CA7A31A1CB99400A2F142 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E05CA7A41A1CB99400A2F142 /* Build configuration list for PBXNativeTarget "WZSnakeHudDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -432,6 +441,7 @@
 				E05CA7A61A1CB99400A2F142 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

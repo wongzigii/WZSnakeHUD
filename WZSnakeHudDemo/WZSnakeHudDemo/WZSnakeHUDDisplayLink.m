@@ -50,7 +50,8 @@
     self.nextDeltaTimeZero = YES;
 }
 
-///* This method creates the selector that we told the CADisplayDelegate call *//
+/**
+ *This method creates the selector that we told the CADisplayDelegate call */
 - (void)displayLinkUpdate
 {
     //calculate the frame time difference by subtracting the current time from the previous time
@@ -79,7 +80,5 @@
     }
     return self;
 }
-
-
 
 @end

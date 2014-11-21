@@ -21,7 +21,6 @@ static const CGFloat centerViewHeight = 75.5f;
 @implementation WZSnakeHUDViewController
 
 #pragma mark - instance method
-
 - (void)hide:(void (^)(void))completion {
     [UIView animateWithDuration:0.3 / 1.5 animations: ^{
         _hudView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
@@ -36,7 +35,6 @@ static const CGFloat centerViewHeight = 75.5f;
             }];
         }];
     }];
-
 }
 
 #pragma mark - private
@@ -61,6 +59,8 @@ static const CGFloat centerViewHeight = 75.5f;
     
     hudMessageLabel.frame = CGRectMake(_hudView.frame.size.width / 2 - hudMessageLabel.frame.size.width / 2,_hudView.frame.size.height / 2, hudMessageLabel.frame.size.width, hudMessageLabel.frame.size.height);
     [_hudView addSubview:hudMessageLabel];
+    
+    [_hudView showAnimated];
 }
 
 #pragma mark - life cycle
@@ -69,19 +69,6 @@ static const CGFloat centerViewHeight = 75.5f;
     [super viewDidLoad];
     self.view.backgroundColor = self.hudMaskColor;
     [self setupDefaultHUD];
-    
-    _hudView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
-    [UIView animateWithDuration:0.3 / 1.5 animations: ^{
-        _hudView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-    } completion: ^(BOOL finished) {
-        [UIView animateWithDuration:0.3 / 2 animations: ^{
-            _hudView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
-        } completion: ^(BOOL finished) {
-            [UIView animateWithDuration:0.3 / 2 animations: ^{
-                _hudView.transform = CGAffineTransformIdentity;
-            }];
-        }];
-    }];
 }
 
 @end

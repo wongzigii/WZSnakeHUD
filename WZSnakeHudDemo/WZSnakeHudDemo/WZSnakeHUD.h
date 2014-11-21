@@ -31,4 +31,6 @@
 
 + (void)setLineWidth:(CGFloat)lineWidth;
 
+- (void)showAnimated;
+
 @end

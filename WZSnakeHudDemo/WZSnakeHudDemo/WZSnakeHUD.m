@@ -140,7 +140,8 @@ typedef enum {
 }
 
 #pragma mark - WZSnakeDisplayLink Delegate
-- (void)displayWillUpdateWithDeltaTime:(CFTimeInterval)deltaTime {
+- (void)displayWillUpdateWithDeltaTime:(CFTimeInterval)deltaTime
+{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
         CGFloat deltaValue = MIN(1.0f, deltaTime / (1.0f / framePerSecond));
@@ -192,17 +193,20 @@ typedef enum {
 }
 
 #pragma mark - private
-- (UIImage *)preDrawImage {
+- (UIImage *)preDrawImage
+{
     UIImage *rectLineImage;
     
     UIGraphicsBeginImageContext(CGSizeMake(self.bounds.size.width, self.bounds.size.height));
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetRGBStrokeColor(context, 255, 255, 255, 1);
     CGContextSetLineWidth(context, self.hudLineWidth);
+    //original point
     CGContextMoveToPoint(context, 0, 0);
     
-    //Here we go
+    //here we go
     CGContextAddLineToPoint(context, self.lengthTop, 0);
     //reached top-right corner
     if  (self.lengthTop >= FrameWidth) {
@@ -222,14 +226,32 @@ typedef enum {
     return rectLineImage;
 }
 
+- (void)showAnimated
+{
+    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.001, 0.001);
+    [UIView animateWithDuration:0.3 / 1.5 animations: ^{
+        self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+    } completion: ^(BOOL finished) {
+        [UIView animateWithDuration:0.3 / 2 animations: ^{
+            self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
+        } completion: ^(BOOL finished) {
+            [UIView animateWithDuration:0.3 / 2 animations: ^{
+                self.transform = CGAffineTransformIdentity;
+            }];
+        }];
+    }];
+}
+
 #pragma mark - method override
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     [super drawRect:rect];
     [self.lineImage drawInRect:rect];
 }
 
 #pragma mark - life cycle
-- (id)initWithFrame:(CGRect)frame {
+- (id)initWithFrame:(CGRect)frame
+{
     self = [super initWithFrame:frame];
     if (self) {
         //init

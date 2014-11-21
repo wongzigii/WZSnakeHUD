@@ -32,7 +32,6 @@
 {
     [super viewDidLoad];
     
-    [WZSnakeHUD setColors:@[[UIColor grayColor], [UIColor whiteColor], [UIColor blackColor], [UIColor purpleColor]]];
     [WZSnakeHUD setBackgroundColor:[UIColor purpleColor]];
     [WZSnakeHUD setMaskColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f]];
     [WZSnakeHUD setLineWidth:5.0f];

@@ -18,7 +18,9 @@ Third, use
 
 ```` objc
 [WZSnakeHUD showWithText:@"Loading"]
-```` method to show.
+````
+
+method to show.
 
 ###Custom
 

@@ -16,7 +16,7 @@ Second, add `#import "WZSnakeHUD.h"` to the header of viewController.
 
 Third, use
 ```` objc
-[WZSnakeHUD showWithText:@"Loading"];
+[WZSnakeHUD showWithText:@"Loading"]
 ```` method to show.
 
 ###Custom

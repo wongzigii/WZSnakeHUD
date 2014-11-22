@@ -10,17 +10,11 @@ A clean and neat HUD is available NOW.
 
 ##Installation
 
-First, drag the `WZSnakeHUD` file into your project.
+1. Drag the `WZSnakeHUD` file into your project.
 
-Second, add `#import "WZSnakeHUD.h"` to the header of viewController.
+2. Add `#import "WZSnakeHUD.h"` to the header of viewController.
 
-Third, use
-
-```` objc
-[WZSnakeHUD showWithText:@"Loading"]
-````
-
-method to show.
+3. Use `[WZSnakeHUD showWithText:@"Loading"]` method to show.
 
 ###Custom
 

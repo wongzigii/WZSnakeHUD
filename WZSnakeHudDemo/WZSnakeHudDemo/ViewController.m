@@ -17,7 +17,7 @@
     NSDictionary *attributes = @{ NSForegroundColorAttributeName : color,
                                   NSFontAttributeName : font };
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@"Loading" attributes:attributes];
-    [WZSnakeHUD showMessage:attributedString];
+    [WZSnakeHUD showWithText:attributedString];
     [self performSelector:@selector(hideHUD) withObject:nil afterDelay:5.5f];
 }
 
@@ -32,9 +32,9 @@
 {
     [super viewDidLoad];
     
-    [WZSnakeHUD setBackgroundColor:[UIColor purpleColor]];
-    [WZSnakeHUD setMaskColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f]];
-    [WZSnakeHUD setLineWidth:5.0f];
+    [WZSnakeHUD showWithBackgroundColor:[UIColor purpleColor]];
+    [WZSnakeHUD showWithMaskColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f]];
+    [WZSnakeHUD showWithLineWidth:5.0f];
 }
 
 @end

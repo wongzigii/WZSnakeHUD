@@ -5,7 +5,7 @@ WZSnakeHUD
 A clean and neat HUD is available NOW.
 
 <p>
-<img src="WZSnakeHUDDemo/Gif/WZSnakeHUD.gif">
+<img src="WZSnakeHudDemo/Gif/WZSnakeHUD.gif">
 </p>
 
 ##Installation
@@ -47,7 +47,7 @@ LineWidth:
 
 ##Contribute
 
-Pull request and contribution is welcomed.
+Pull request and contribution are welcomed.
 
 ##Contact
 

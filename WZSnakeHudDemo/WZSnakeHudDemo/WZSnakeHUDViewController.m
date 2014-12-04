@@ -23,6 +23,7 @@ static const CGFloat hudViewHeight = 75.5f;
 #pragma mark - instance method
 - (void)hide:(void (^)(void))completion {
     [UIView animateWithDuration:0.3 / 1.5 animations: ^{
+        _hudView.hudMaskColor = [UIColor clearColor];
         _hudView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
     } completion: ^(BOOL finished) {
         [UIView animateWithDuration:0.3 / 2 animations: ^{

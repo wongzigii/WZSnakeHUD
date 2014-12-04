@@ -11,51 +11,38 @@
 #import "WZSnakeHUDWindow.h"
 #import "WZSnakeHUDViewController.h"
 
-static const CGFloat FrameWidth      = 84.0f;
-static const CGFloat FrameHeight     = 76.0f;
-static const CGFloat lengthIteration = 8.0f;
-static const CGFloat framePerSecond  = 60.0f;
-
-typedef enum {
-    RectLineGoRight,
-    RectLineGoDown,
-    RectLineGoLeft,
-    RectLineGoUp,
-    RectLineStop
-} RectLineGoDirection;
-
 @interface WZSnakeHUD()
 
 @property (nonatomic, assign) NSInteger lengthTop;
 @property (nonatomic, assign) NSInteger heightTop;
 @property (nonatomic, assign) NSInteger lengthBottom;
 @property (nonatomic, assign) NSInteger heightBottom;
-@property (nonatomic, assign) RectLineGoDirection direction;
+@property (nonatomic, assign) LineDirection direction;
 @property (nonatomic, strong) UIImage *lineImage;
 @property (nonatomic, strong) WZSnakeHUDDisplayLink *displayLink;
 @property (nonatomic, weak)   WZSnakeHUDWindow *window;
+@property (nonatomic, assign) CGFloat *movingSpeed;
 
 @end
 
 @implementation WZSnakeHUD
 
 #pragma mark - class method
-+ (void)show {
-    WZSnakeHUDViewController *vc = [[WZSnakeHUDViewController alloc] init];
-    vc.hudColors = [self hudColors];
-    vc.hudBackgroundColor = [self hudBackgroundColor];
-    vc.hudMaskColor = [self hudMaskColor];
-    vc.hudLineWidth = [self hudLineWidth];
-    [self hudWindow].rootViewController = vc;
-    [[self hudWindow] makeKeyAndVisible];}
 
-+ (void)showWithText:(NSAttributedString *)text {
++ (void)show:(NSString *)text {
+    NSString *string = [NSString stringWithFormat:@"%@",text];
+    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    UIColor *color = [UIColor whiteColor];
+    NSDictionary *attributes = @{ NSForegroundColorAttributeName : color,
+                                  NSFontAttributeName : font };
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string
+                                                                           attributes:attributes];
     WZSnakeHUDViewController *vc = [[WZSnakeHUDViewController alloc] init];
     vc.hudColors = [self hudColors];
     vc.hudBackgroundColor = [self hudBackgroundColor];
     vc.hudMaskColor = [self hudMaskColor];
     vc.hudLineWidth = [self hudLineWidth];
-    vc.hudMessage = text;
+    vc.hudMessage = attributedString;
     [self hudWindow].rootViewController = vc;
     [[self hudWindow] makeKeyAndVisible];
 }
@@ -68,6 +55,7 @@ typedef enum {
     }];
 }
 
+//传递参数进来，setAssociated
 + (void)showWithColors:(NSArray *)colors {
     [self setHudColors:colors];
 }
@@ -97,17 +85,19 @@ typedef enum {
     objc_setAssociatedObject(self, @selector(hudWindow), hudWindow, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+//hudColor ivar
 + (void)setHudColors:(NSArray *)hudColors {
     objc_setAssociatedObject(self, @selector(hudColors), hudColors, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (NSArray *)hudColors {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudColors:@[[UIColor redColor], [UIColor greenColor], [UIColor yellowColor], [UIColor blueColor]]];
+        [self setHudColors:@[[UIColor redColor], [UIColor yellowColor], [UIColor greenColor]]];
     }
     return objc_getAssociatedObject(self, _cmd);
 }
 
+//hudBackgroundColor ivar
 + (void)setHudBackgroundColor:(UIColor *)hudBackgroundColor {
     objc_setAssociatedObject(self, @selector(hudBackgroundColor), hudBackgroundColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -119,72 +109,77 @@ typedef enum {
     return objc_getAssociatedObject(self, _cmd);
 }
 
+//hudLineWidth ivar
 + (void)setHudLineWidth:(CGFloat)hudLineWidth {
     objc_setAssociatedObject(self, @selector(hudLineWidth), @(hudLineWidth), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (CGFloat)hudLineWidth {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudLineWidth:2.0f];
+        [self setHudLineWidth:3.0f];
     }
     NSNumber *hudLineWidth = objc_getAssociatedObject(self, _cmd);
     return [hudLineWidth floatValue];
 }
 
+//hudMaskColor ivar
 + (void)setHudMaskColor:(UIColor *)hudMaskColor {
     objc_setAssociatedObject(self, @selector(hudMaskColor), hudMaskColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (UIColor *)hudMaskColor {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudMaskColor:[UIColor clearColor]];
+        [self setHudMaskColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f]];
     }
     return objc_getAssociatedObject(self, _cmd);
 }
+
+//Speed
 
 #pragma mark - WZSnakeDisplayLink Delegate
 - (void)displayWillUpdateWithDeltaTime:(CFTimeInterval)deltaTime
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         
-        CGFloat deltaValue = MIN(1.0f, deltaTime / (1.0f / framePerSecond));
+        CGFloat deltaValue = MIN(1.0f, deltaTime / (1.0f / WZSnakeFramePerSecond));
         
         switch (self.direction) {
-            case RectLineGoRight:
+            case LineDirectionGoRight:
             {
-                self.lengthTop += lengthIteration * deltaValue / 5;
-                if (self.lengthTop >= FrameWidth) {
-                    self.direction = RectLineGoDown;
+                self.lengthTop += (WZSnakeLengthIteration * deltaValue / 5);
+                if (self.lengthTop >= WZSnakeHUDFrameWidth) {
+                    self.direction = LineDirectionGoDown;
                 }
                 break;
             }
-            case RectLineGoDown:
+            case LineDirectionGoDown:
             {
-                self.heightTop += lengthIteration * deltaValue / 5;
-                if (self.heightTop >= FrameHeight) {
-                    self.direction = RectLineGoLeft;
+                self.heightTop += WZSnakeLengthIteration * deltaValue / 5;
+                if (self.heightTop >= WZSnakeHUDFrameHeight) {
+                    self.direction = LineDirectionGoLeft;
                 }
                 break;
             }
-            case RectLineGoLeft:
+            case LineDirectionGoLeft:
             {
-                self.lengthBottom += lengthIteration * deltaValue / 5;
-                if (self.lengthBottom >= FrameWidth) {
-                    self.direction = RectLineGoUp;
+                self.lengthBottom += WZSnakeLengthIteration * deltaValue / 5;
+                if (self.lengthBottom >= WZSnakeHUDFrameWidth) {
+                    self.direction = LineDirectionGoUp;
                 }
                 break;
             }
-            case RectLineGoUp:
+            case LineDirectionGoUp:
             {
-                self.heightBottom += lengthIteration * deltaValue / 5;
-                if (self.heightBottom >= FrameHeight) {
-                    self.direction = RectLineStop;
+                self.heightBottom += WZSnakeLengthIteration * deltaValue / 5;
+                if (self.heightBottom >= WZSnakeHUDFrameHeight) {
+                    self.direction = LineDirectionStop;
                 }
                 break;
             }
-            case RectLineStop:
+            case LineDirectionStop:
             {
                 //NSLog(@"Done");
+
             }
                 break;
         }
@@ -211,18 +206,22 @@ typedef enum {
     
     //here we go
     CGContextAddLineToPoint(context, self.lengthTop, 0);
+    
     //reached top-right corner
-    if  (self.lengthTop >= FrameWidth) {
-        CGContextAddLineToPoint(context, FrameWidth, (self.heightTop >= FrameHeight) ? FrameHeight : self.heightTop);
+    if  (self.lengthTop >= WZSnakeHUDFrameWidth) {
+        CGContextAddLineToPoint(context, WZSnakeHUDFrameWidth, (self.heightTop >= WZSnakeHUDFrameHeight) ? WZSnakeHUDFrameHeight : self.heightTop);
     }
+    
     //reached bottom-right corner
-    if (self.heightTop >= FrameHeight) {
-        CGContextAddLineToPoint(context, (self.lengthBottom <= -FrameWidth) ? -FrameWidth : (FrameWidth - self.lengthBottom), FrameHeight);
+    if (self.heightTop >= WZSnakeHUDFrameHeight) {
+        CGContextAddLineToPoint(context, (self.lengthBottom <= -WZSnakeHUDFrameWidth) ? -WZSnakeHUDFrameWidth : (WZSnakeHUDFrameWidth - self.lengthBottom), WZSnakeHUDFrameHeight);
     }
+    
     //reached bottom-left corner
-    if (self.lengthBottom >= FrameWidth) {
-        CGContextAddLineToPoint(context, 0, (self.heightBottom <= -FrameHeight) ? -FrameHeight : (FrameHeight - self.heightBottom));
+    if (self.lengthBottom >= WZSnakeHUDFrameWidth) {
+        CGContextAddLineToPoint(context, 0, (self.heightBottom <= -WZSnakeHUDFrameHeight) ? -WZSnakeHUDFrameHeight : (WZSnakeHUDFrameHeight - self.heightBottom));
     }
+    
     CGContextStrokePath(context);
     rectLineImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
@@ -231,7 +230,7 @@ typedef enum {
 
 - (void)showAnimated
 {
-    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0, 0.000);
+    self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.0, 0.0);
     [UIView animateWithDuration:0.3 / 1.5 animations: ^{
         self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
     } completion: ^(BOOL finished) {
@@ -260,9 +259,11 @@ typedef enum {
         //init
         self.backgroundColor = [UIColor clearColor];
         self.lengthTop = 0;
-        self.direction = RectLineGoRight;
+        self.direction = LineDirectionGoRight;
+        //set delegate
         self.displayLink = [[WZSnakeHUDDisplayLink alloc] initWithDelegate:self];
     }
+    
     return self;
 }
 

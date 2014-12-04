@@ -11,19 +11,15 @@
 
 @implementation ViewController
 
-- (IBAction)showAction:(id)sender {
-    UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-    UIColor *color = [UIColor whiteColor];
-    NSDictionary *attributes = @{ NSForegroundColorAttributeName : color,
-                                  NSFontAttributeName : font };
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:@"Loading" attributes:attributes];
-    [WZSnakeHUD showWithText:attributedString];
+- (IBAction)showAction:(id)sender
+{
+    [WZSnakeHUD show:@"Loading"];
     [self performSelector:@selector(hideHUD) withObject:nil afterDelay:5.5f];
 }
 
 #pragma mark - private
-
-- (void)hideHUD {
+- (void)hideHUD
+{
     [WZSnakeHUD hide];
 }
 
@@ -35,6 +31,7 @@
     [WZSnakeHUD showWithBackgroundColor:[UIColor purpleColor]];
     [WZSnakeHUD showWithMaskColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f]];
     [WZSnakeHUD showWithLineWidth:5.0f];
+    
 }
 
 @end

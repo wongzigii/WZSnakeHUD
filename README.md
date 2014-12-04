@@ -1,4 +1,4 @@
-#WZSnakeHUD
+# WZSnakeHUD [![Build Status](https://travis-ci.org/wongzigii/WZSnakeHUD.png)](https://travis-ci.org/wongzigii/WZSnakeHUD)
 
 ##A clean and neat HUD is available NOW.
 

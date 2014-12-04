@@ -1,8 +1,7 @@
-WZSnakeHUD
-==========
+#WZSnakeHUD
 
+##A clean and neat HUD is available NOW.
 
-A clean and neat HUD is available NOW.
 
 <p>
 <img src="WZSnakeHudDemo/Gif/WZSnakeHUD.gif">
@@ -10,13 +9,36 @@ A clean and neat HUD is available NOW.
 
 ##Installation
 
-1. Drag the `WZSnakeHUD` file into your project.
+Drag the `WZSnakeHUD` file into your project.
 
-2. Add `#import "WZSnakeHUD.h"` to the header of viewController.
+##Requirements
 
-3. Use `[WZSnakeHUD showWithText:@"Loading"]` method to show.
+ * Xcode 6
+ * iOS 8
+ * ARC
+ 
+##Usage
 
-###Custom
+1, Add the following import to the top of the file:
+
+```` objc
+ #import "WZSnakeHUD.h"
+````
+
+2, Use the following to display the HUD:
+
+```` objc
+[WZSnakeHUD show:@"Loading"];
+````
+
+3, Simply dismiss after complete your task:
+
+```` objc
+[WZSnakeHUD hide];
+````
+
+###Customize
+Feel free to customize.
 
 BackgroundColor:
 
@@ -45,16 +67,8 @@ Dimiss:
 
  * More Customization and features
  * CocoaPods support
- * Uncoupled code
-
-##Contribute
-
-Pull request and contribution are welcomed.
-
-##Contact
-
-<wongzigii@outlook.com>
+ * Travis-CI
 
 ##License
 
-MIT
+[MIT](https://github.com/wongzigii/WZSnakeHUD/blob/master/LICENSE)

@@ -11,9 +11,9 @@
 @interface WZSnakeHUDViewController : UIViewController
 
 @property (nonatomic, strong) NSArray *hudColors;
-@property (nonatomic, strong) UIColor *hudBackgroundColor;
-@property (nonatomic, strong) UIColor *hudMaskColor;
 @property (nonatomic, assign) CGFloat hudLineWidth;
+@property (nonatomic, strong) UIColor *hudMaskColor;
+@property (nonatomic, strong) UIColor *hudBackgroundColor;
 @property (nonatomic, strong) NSAttributedString *hudMessage;
 
 - (void)hide:(void (^)(void))completion;

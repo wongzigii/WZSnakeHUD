@@ -74,7 +74,7 @@ Dimiss:
 
 [Wongzigii](https://github.com/wongzigii)
 
-[wongzigii@outook.com](wongzigii@outlook.com)
+wongzigii@outlook.com
 
 ## License
 

@@ -15,7 +15,7 @@ static const CGFloat WZSnakeHUDFrameHeight   = 76.0f;
 static const CGFloat WZSnakeLengthIteration  = 8.0f;
 static const CGFloat WZSnakeFramePerSecond   = 60.0f;
 
-/**
+/*!
  * define the line direction
  */
 typedef enum {

@@ -37,6 +37,17 @@ Drag the `WZSnakeHUD` file into your project.
 ```` objc
 [WZSnakeHUD hide];
 ````
+With long-running task, it is recommended to put your stuff on a blackground queue, getting rid of the block of User Interface, and update on the main queue after fired.
+
+```` objc
+[WZSnakeHUD show:@"Loading"];
+dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+	// Do your stuff...
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[WZSnakeHUD hide];
+	});
+});
+````
 
 ## Customize
 Feel free to customize.
@@ -68,13 +79,10 @@ Dimiss:
 ## TODO
 
  * More Customizations and features
- * CocoaPods support
 
 ## Author
 
 [Wongzigii](https://github.com/wongzigii)
-
-wongzigii@outlook.com
 
 ## License
 

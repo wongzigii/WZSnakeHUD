@@ -11,7 +11,7 @@
 @interface WZSnakeHUDDisplayLink()
 
 @property (nonatomic, strong) CADisplayLink *displayLink;
-@property (nonatomic, assign) BOOL nextDeltaTimeZero;
+@property (nonatomic, assign) BOOL           nextDeltaTimeZero;
 @property (nonatomic, assign) CFTimeInterval previousTimestamp;
 
 @end
@@ -31,7 +31,6 @@
 {
     //setup displayLink
     self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkUpdate)];
-    
     [self.displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActiveNotification) name:UIApplicationDidBecomeActiveNotification object:nil];

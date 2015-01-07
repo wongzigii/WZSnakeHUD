@@ -28,10 +28,10 @@ typedef enum {
 
 @interface WZSnakeHUD : UIView<WZSnakeDisplayLinkDelegate>
 
-@property (nonatomic, strong) NSArray *hudColors;
-@property (nonatomic, assign) CGFloat hudLineWidth;
-@property (nonatomic, strong) UIColor *hudMaskColor;
-@property (nonatomic, strong) UIColor *hudBackgroundColor;
+@property (nonatomic, strong) NSArray            *hudColors;
+@property (nonatomic, assign) CGFloat            hudLineWidth;
+@property (nonatomic, strong) UIColor            *hudMaskColor;
+@property (nonatomic, strong) UIColor            *hudBackgroundColor;
 @property (nonatomic, strong) NSAttributedString *hudMessage;
 
 + (void)show:(NSString *)text;

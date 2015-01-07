@@ -13,15 +13,15 @@
 
 @interface WZSnakeHUD()
 
-@property (nonatomic, assign) NSInteger lengthTop;
-@property (nonatomic, assign) NSInteger heightTop;
-@property (nonatomic, assign) NSInteger lengthBottom;
-@property (nonatomic, assign) NSInteger heightBottom;
-@property (nonatomic, assign) LineDirection direction;
-@property (nonatomic, strong) UIImage *lineImage;
+@property (nonatomic, assign) NSInteger              lengthTop;
+@property (nonatomic, assign) NSInteger              heightTop;
+@property (nonatomic, assign) NSInteger              lengthBottom;
+@property (nonatomic, assign) NSInteger              heightBottom;
+@property (nonatomic, assign) LineDirection          direction;
+@property (nonatomic, strong) UIImage               *lineImage;
 @property (nonatomic, strong) WZSnakeHUDDisplayLink *displayLink;
-@property (nonatomic, weak)   WZSnakeHUDWindow *window;
-@property (nonatomic, assign) CGFloat *movingSpeed;
+@property (nonatomic, weak)   WZSnakeHUDWindow      *window;
+@property (nonatomic, assign) CGFloat               *movingSpeed;
 
 @end
 
@@ -55,7 +55,6 @@
     }];
 }
 
-//传递参数进来，setAssociated
 + (void)showWithColors:(NSArray *)colors {
     [self setHudColors:colors];
 }
@@ -72,7 +71,6 @@
     [self setHudLineWidth:lineWidth];
 }
 
-// instance variable using runtime
 //http://stackoverflow.com/questions/17678298/how-does-objc-setassociatedobject-work
 + (WZSnakeHUDWindow *)hudWindow {
     if (!objc_getAssociatedObject(self, _cmd)) {

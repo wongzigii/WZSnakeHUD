@@ -5,7 +5,7 @@
 ## A clean and neat HUD is available NOW.
 
 <p>
-<img src="WZSnakeHudDemo/Gif/WZSnakeHUD.gif">
+<img src="Gif/WZSnakeHUD.gif">
 </p>
 
 ## Installation

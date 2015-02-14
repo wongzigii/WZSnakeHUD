@@ -1,16 +1,10 @@
 # WZSnakeHUD 
 
-[![Build Status](http://img.shields.io/travis/wongzigii/WZSnakeHUD.svg?style=flat)](https://travis-ci.org/wongzigii/WZSnakeHUD)
+[![Build Status](http://img.shields.io/travis/wongzigii/WZSnakeHUD.svg?style=flat)](https://travis-ci.org/wongzigii/WZSnakeHUD) 
+[![Version](https://img.shields.io/cocoapods/v/WZSnakeHUD.svg?style=flat)](http://cocoadocs.org/docsets/WZSnakeHUD)
+[![Platform](https://img.shields.io/cocoapods/p/WZSnakeHUD.svg?style=flat)](http://cocoadocs.org/docsets/WZSnakeHUD)
 
-## A clean and neat HUD is available NOW.
-
-<p>
-<img src="Gif/WZSnakeHUD.gif">
-</p>
-
-## Installation
-
-Drag the `WZSnakeHUD` file into your project.
+<p><img src="WZSnakeHUD.gif"></p>
 
 ## Requirements
 
@@ -18,7 +12,17 @@ Drag the `WZSnakeHUD` file into your project.
  * iOS 8
  * ARC
  
-## Usage
+## Installation
+
+WZSnakeHUD is available via [Cocoapods](http://cocoapods.org/), add this line in your podfile :
+
+```` objc
+pod 'WZSnakeHUD', '~> 0.1'
+````
+
+Run `pod install` to install the dependencies.
+
+## Getting Started
 
 1, Add the following import to the top of the file:
 
@@ -37,6 +41,7 @@ Drag the `WZSnakeHUD` file into your project.
 ```` objc
 [WZSnakeHUD hide];
 ````
+
 With long-running task, it is recommended to put your stuff on a blackground queue, getting rid of the block of User Interface, and update on the main queue after fired.
 
 ```` objc
@@ -50,7 +55,6 @@ dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
 ````
 
 ## Customize
-Feel free to customize.
 
 BackgroundColor:
 
@@ -76,15 +80,8 @@ Dimiss:
 [WZSnakeHUD hide];
 ````
 
-## TODO
-
- * More Customizations and features
-
-## Author
-
-[Wongzigii](https://github.com/wongzigii)
-
 ## License
 
-[MIT](https://github.com/wongzigii/WZSnakeHUD/blob/master/LICENSE)
+WZSnakeHUD is under MIT LICENCE, see the [LICENCE](https://github.com/wongzigii/WZSnakeHUD/blob/master/LICENSE) file for more info.
+
 

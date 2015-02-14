@@ -10,9 +10,6 @@ Pod::Spec.new do |s|
   s.name         = "WZSnakeHUD"
   s.version      = "0.1"
   s.summary      = "A clean and neat HUD."
-  s.description  = <<-DESC
-                   This is my first open source repo. The idea is inspired by Snake Game. This is also an easy-dead HUD, I hope you will like it.
-                   DESC
   s.homepage     = "http://wongzigii.com"
   s.license      = { :type => "MIT", :file => "LICENSE" }
   s.author       = { "Wongzigii" => "wongzigii@outlook.com" }

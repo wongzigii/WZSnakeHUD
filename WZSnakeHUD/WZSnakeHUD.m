@@ -35,48 +35,44 @@
     UIColor *color = [UIColor whiteColor];
     NSDictionary *attributes = @{ NSForegroundColorAttributeName : color,
                                   NSFontAttributeName : font };
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string
-                                                                           attributes:attributes];
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:string attributes:attributes];
     WZSnakeHUDViewController *vc = [[WZSnakeHUDViewController alloc] init];
-    vc.hudColors = [self hudColors];
-    vc.hudBackgroundColor = [self hudBackgroundColor];
-    vc.hudMaskColor = [self hudMaskColor];
-    vc.hudLineWidth = [self hudLineWidth];
+    vc.hudColors = self.hudColors;
+    vc.hudBackgroundColor = self.hudBackgroundColor;
+    vc.hudMaskColor = self.hudMaskColor;
+    vc.hudLineWidth = self.hudLineWidth;
     vc.hudMessage = attributedString;
-    [self hudWindow].rootViewController = vc;
-    [[self hudWindow] makeKeyAndVisible];
+    self.hudWindow.rootViewController = vc;
+    [self.hudWindow makeKeyAndVisible];
 }
 
 + (void)hide {
-    [[self hudWindow].rootViewController performSelector:@selector(hide:) withObject: ^{
-        [self hudWindow].hidden = YES;
-        [self setHudWindow:nil];
+    [self.hudWindow.rootViewController performSelector:@selector(hide:) withObject: ^{
+        self.hudWindow.hidden = YES;
+        self.hudWindow = nil;
         [[UIApplication sharedApplication].keyWindow makeKeyWindow];
     }];
 }
 
-//传递参数进来，setAssociated
 + (void)showWithColors:(NSArray *)colors {
-    [self setHudColors:colors];
+    self.hudColors = colors;
 }
 
 + (void)showWithBackgroundColor:(UIColor *)backgroundColor {
-    [self setHudBackgroundColor:backgroundColor];
+    self.hudBackgroundColor = backgroundColor;
 }
 
 + (void)showWithMaskColor:(UIColor *)maskColor {
-    [self setHudMaskColor:maskColor];
+    self.hudMaskColor = maskColor;
 }
 
 + (void)showWithLineWidth:(CGFloat)lineWidth {
-    [self setHudLineWidth:lineWidth];
+    self.hudLineWidth = lineWidth;
 }
 
-// instance variable using runtime
-//http://stackoverflow.com/questions/17678298/how-does-objc-setassociatedobject-work
 + (WZSnakeHUDWindow *)hudWindow {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudWindow:[[WZSnakeHUDWindow alloc] initWithFrame:[UIScreen mainScreen].bounds]];
+        self.hudWindow = [[WZSnakeHUDWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     }
     return objc_getAssociatedObject(self, _cmd);
 }
@@ -85,57 +81,52 @@
     objc_setAssociatedObject(self, @selector(hudWindow), hudWindow, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-//hudColor ivar
 + (void)setHudColors:(NSArray *)hudColors {
     objc_setAssociatedObject(self, @selector(hudColors), hudColors, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (NSArray *)hudColors {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudColors:@[[UIColor redColor], [UIColor yellowColor], [UIColor greenColor]]];
+        self.hudColors = @[[UIColor redColor], [UIColor yellowColor], [UIColor greenColor]];
     }
     return objc_getAssociatedObject(self, _cmd);
 }
 
-//hudBackgroundColor ivar
 + (void)setHudBackgroundColor:(UIColor *)hudBackgroundColor {
     objc_setAssociatedObject(self, @selector(hudBackgroundColor), hudBackgroundColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (UIColor *)hudBackgroundColor {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.65f]];
+        self.hudBackgroundColor = [UIColor colorWithRed:127.0/255.0 green:198.0/255.0 blue:35.0/255.0 alpha:0.65f];
     }
     return objc_getAssociatedObject(self, _cmd);
 }
 
-//hudLineWidth ivar
 + (void)setHudLineWidth:(CGFloat)hudLineWidth {
     objc_setAssociatedObject(self, @selector(hudLineWidth), @(hudLineWidth), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (CGFloat)hudLineWidth {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudLineWidth:3.0f];
+        self.hudLineWidth = 5.0f;
     }
     NSNumber *hudLineWidth = objc_getAssociatedObject(self, _cmd);
     return [hudLineWidth floatValue];
 }
 
-//hudMaskColor ivar
 + (void)setHudMaskColor:(UIColor *)hudMaskColor {
     objc_setAssociatedObject(self, @selector(hudMaskColor), hudMaskColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 + (UIColor *)hudMaskColor {
     if (!objc_getAssociatedObject(self, _cmd)) {
-        [self setHudMaskColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f]];
+        self.hudMaskColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.5f];
     }
     return objc_getAssociatedObject(self, _cmd);
 }
 
 //Speed
-
 #pragma mark - WZSnakeDisplayLink Delegate
 - (void)displayWillUpdateWithDeltaTime:(CFTimeInterval)deltaTime
 {
@@ -179,6 +170,9 @@
             case LineDirectionStop:
             {
                 //NSLog(@"Done");
+                self.hudWindow.hidden = YES;
+                self.hudWindow = nil;
+                [[UIApplication sharedApplication].keyWindow makeKeyWindow];
 
             }
                 break;

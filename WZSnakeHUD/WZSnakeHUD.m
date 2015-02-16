@@ -8,10 +8,22 @@
 
 #import "WZSnakeHUD.h"
 #import <objc/runtime.h>
-#import "WZSnakeHUDWindow.h"
 #import "WZSnakeHUDViewController.h"
+#import "WZSnakeHUDWindow.h"
+static const CGFloat WZSnakeHUDFrameWidth    = 84.0f;
+static const CGFloat WZSnakeHUDFrameHeight   = 76.0f;
+static const CGFloat WZSnakeLengthIteration  = 8.0f;
+static const CGFloat WZSnakeFramePerSecond   = 60.0f;
 
-@interface WZSnakeHUD()
+typedef enum {
+    LineDirectionGoRight,
+    LineDirectionGoDown,
+    LineDirectionGoLeft,
+    LineDirectionGoUp,
+    LineDirectionStop
+} LineDirection;
+
+@interface WZSnakeHUD()<WZSnakeDisplayLinkDelegate>
 
 @property (nonatomic, assign) NSInteger lengthTop;
 @property (nonatomic, assign) NSInteger heightTop;
@@ -25,6 +37,9 @@
 
 @end
 
+/*!
+ *  @implementation WZSnakeHUD
+ */
 @implementation WZSnakeHUD
 
 #pragma mark - class method
@@ -50,6 +65,7 @@
     [self.hudWindow.rootViewController performSelector:@selector(hide:) withObject: ^{
         self.hudWindow.hidden = YES;
         self.hudWindow = nil;
+        self.hudWindow.backgroundColor = nil;
         [[UIApplication sharedApplication].keyWindow makeKeyWindow];
     }];
 }
@@ -170,10 +186,6 @@
             case LineDirectionStop:
             {
                 //NSLog(@"Done");
-                self.hudWindow.hidden = YES;
-                self.hudWindow = nil;
-                [[UIApplication sharedApplication].keyWindow makeKeyWindow];
-
             }
                 break;
         }
@@ -201,17 +213,17 @@
     //here we go
     CGContextAddLineToPoint(context, self.lengthTop, 0);
     
-    //reached top-right corner
+    //reached upper-right corner
     if  (self.lengthTop >= WZSnakeHUDFrameWidth) {
         CGContextAddLineToPoint(context, WZSnakeHUDFrameWidth, (self.heightTop >= WZSnakeHUDFrameHeight) ? WZSnakeHUDFrameHeight : self.heightTop);
     }
     
-    //reached bottom-right corner
+    //reached lower-right corner
     if (self.heightTop >= WZSnakeHUDFrameHeight) {
         CGContextAddLineToPoint(context, (self.lengthBottom <= -WZSnakeHUDFrameWidth) ? -WZSnakeHUDFrameWidth : (WZSnakeHUDFrameWidth - self.lengthBottom), WZSnakeHUDFrameHeight);
     }
     
-    //reached bottom-left corner
+    //reached lower-left corner
     if (self.lengthBottom >= WZSnakeHUDFrameWidth) {
         CGContextAddLineToPoint(context, 0, (self.heightBottom <= -WZSnakeHUDFrameHeight) ? -WZSnakeHUDFrameHeight : (WZSnakeHUDFrameHeight - self.heightBottom));
     }

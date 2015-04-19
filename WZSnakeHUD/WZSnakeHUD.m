@@ -15,13 +15,13 @@ static const CGFloat WZSnakeHUDFrameHeight   = 76.0f;
 static const CGFloat WZSnakeLengthIteration  = 8.0f;
 static const CGFloat WZSnakeFramePerSecond   = 60.0f;
 
-typedef enum {
+typedef NS_ENUM(NSInteger, LineDirection) {
     LineDirectionGoRight,
     LineDirectionGoDown,
     LineDirectionGoLeft,
     LineDirectionGoUp,
     LineDirectionStop
-} LineDirection;
+};
 
 @interface WZSnakeHUD()<WZSnakeDisplayLinkDelegate>
 

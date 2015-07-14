@@ -1,9 +1,5 @@
 # WZSnakeHUD 
 
-[![Build Status](http://img.shields.io/travis/wongzigii/WZSnakeHUD.svg?style=flat)](https://travis-ci.org/wongzigii/WZSnakeHUD) 
-[![Version](https://img.shields.io/cocoapods/v/WZSnakeHUD.svg?style=flat)](http://cocoadocs.org/docsets/WZSnakeHUD)
-[![Platform](https://img.shields.io/cocoapods/p/WZSnakeHUD.svg?style=flat)](http://cocoadocs.org/docsets/WZSnakeHUD)
-
 <p><img src="WZSnakeHUD.gif"></p>
 
 ## Requirements
@@ -12,15 +8,6 @@
  * iOS 8
  * ARC
  
-## Installation
-
-WZSnakeHUD is available via [Cocoapods](http://cocoapods.org/), add this line in your podfile :
-
-```` objc
-pod 'WZSnakeHUD', '~> 0.1'
-````
-
-Run `pod install` to install the dependencies.
 
 ## Getting Started
 
